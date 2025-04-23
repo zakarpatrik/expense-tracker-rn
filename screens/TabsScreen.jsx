@@ -8,17 +8,18 @@ import IconButton from '../components/IconButton';
 const Tab = createBottomTabNavigator();
 
 const TabsScreen = ({ navigation }) => {
-  const addExpenseHandler = () => {
+  const openManageExpensesHandler = () => {
     navigation.navigate('manage-expenses');
   };
-  
+
   return (
     <Tab.Navigator id="tab-navigation" screenOptions={{
       tabBarActiveTintColor: GlobalStyles.colors.accent500,
       tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
       headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
       headerTintColor: '#fff',
-      headerRight: () => <IconButton color="#fff" icon="plus" size={24} onPress={addExpenseHandler} />,
+      headerRight: () => <IconButton color="#fff" icon="plus" size={24} onPress={openManageExpensesHandler} />,
+      sceneStyle: { backgroundColor: GlobalStyles.colors.primary800 },
     }}>
       <Tab.Screen name="recent-expenses" component={RecentExpensesScreen} options={{
         title: 'Recent',
