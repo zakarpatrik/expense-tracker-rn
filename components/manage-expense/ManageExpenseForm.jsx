@@ -11,11 +11,17 @@ const ManageExpenseForm = ({ onCancel, onSubmit, submitLabel, id }) => {
   const allExpenses = useSelector(selectAllExpenses);
   const currentExpense = allExpenses.find(expense => expense.id === id);
 
-  const [inputValues, setInputValues] = useState({
-    amount: currentExpense?.amount.toLocaleString() || '',
-    date: currentExpense?.date || '',
-    description: currentExpense?.description || '',
-  });
+  const initialValues = currentExpense ? {
+    amount: currentExpense.amount.toString(),
+    date: currentExpense.date,
+    description: currentExpense.description,
+  } : {
+    amount: '',
+    date: '',
+    description: '',
+  };
+
+  const [inputValues, setInputValues] = useState(initialValues);
 
   const inputChangedHandler = (inputIdentifier, enteredValue) => {
     setInputValues((prev) => ({ ...prev, [inputIdentifier]: enteredValue }));
