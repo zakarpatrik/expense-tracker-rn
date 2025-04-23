@@ -6,6 +6,7 @@ import ManageExpensesScreen from './screens/ManageExpensesScreen';
 import { GlobalStyles } from './constants/styles';
 import { Provider } from 'react-redux';
 import store from './store/redux/store';
+import { StatusBar } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,7 @@ export default function App() {
                         options={{ headerShown: true, presentation: 'modal', headerLeft: () => <></> }} />
         </Stack.Navigator>
       </NavigationContainer>
+      <StatusBar style="light" />
     </Provider>
   );
 }
