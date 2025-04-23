@@ -9,7 +9,7 @@ const Tab = createBottomTabNavigator();
 
 const TabsScreen = ({ navigation }) => {
   const openManageExpensesHandler = () => {
-    navigation.navigate('manage-expenses');
+    navigation.navigate('manage-expenses', { title: 'Add Expense' });
   };
 
   return (

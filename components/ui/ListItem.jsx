@@ -6,7 +6,7 @@ const ListItem = ({ description, date, amount }) => {
   const navigation = useNavigation();
 
   const editExpenseHandler = () => {
-    navigation.navigate('manage-expenses', { title: 'Edit Expense' });
+    navigation.navigate('manage-expenses', { title: 'Edit Expense', edit: true });
   };
 
   return (
