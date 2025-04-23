@@ -4,7 +4,8 @@ import { Octicons } from '@expo/vector-icons';
 import { GlobalStyles } from '../constants/styles';
 import CustomButton from '../components/ui/CustomButton';
 import { useDispatch } from 'react-redux';
-import { removeExpense } from '../store/redux/expenses.slice';
+import { addExpense, removeExpense, updateExpense } from '../store/redux/expenses.slice';
+import { formatDate } from '../utils/format-date';
 
 const ManageExpensesScreen = ({ route, navigation }) => {
   const { edit, id, title } = route.params;
@@ -33,12 +34,23 @@ const ManageExpensesScreen = ({ route, navigation }) => {
     cancelPressHandler();
   };
 
+  const confirmExpenseHandler = () => {
+    if (isEditing) {
+      dispatch(updateExpense({ id, description: 'New expense', amount: 19.98, date: formatDate(new Date()) }));
+    } else {
+      dispatch(addExpense({ description: 'New expense', amount: 19.98, date: formatDate(new Date()) }));
+    }
+    cancelPressHandler();
+  };
+
   return (
     <View style={styles.rootContainer}>
       <View style={innerContainerStyle}>
         <CustomButton onPress={cancelPressHandler}>Cancel</CustomButton>
         <CustomButton style={styles.updateButton}
-                      textStyle={styles.upgradeButtonText}>{isEditing ? 'Update' : 'Add'}</CustomButton>
+                      textStyle={styles.upgradeButtonText}
+                      onPress={confirmExpenseHandler}
+        >{isEditing ? 'Update' : 'Add'}</CustomButton>
       </View>
       {isEditing && (
         <Pressable onPress={deleteExpenseHandler}>
