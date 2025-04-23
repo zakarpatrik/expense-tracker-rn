@@ -4,7 +4,7 @@ import { FlatList } from 'react-native';
 const ExpenseList = ({ data }) => {
   return (
     <FlatList data={data}
-              renderItem={({ item }) => <ListItem amount={item.amount} date={item.date}
+              renderItem={({ item }) => <ListItem id={item.id} amount={item.amount} date={item.date}
                                                   description={item.description} />}
               keyExtractor={(item) => item.id} />
   );

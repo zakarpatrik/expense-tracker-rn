@@ -1,12 +1,16 @@
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { useEffect } from 'react';
 import { Octicons } from '@expo/vector-icons';
 import { GlobalStyles } from '../constants/styles';
 import CustomButton from '../components/ui/CustomButton';
+import { useDispatch } from 'react-redux';
+import { removeExpense } from '../store/redux/expenses.slice';
 
 const ManageExpensesScreen = ({ route, navigation }) => {
-  const { edit, title } = route.params;
+  const { edit, id, title } = route.params;
   const isEditing = Boolean(edit);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     navigation.setOptions({ title });
@@ -24,6 +28,11 @@ const ManageExpensesScreen = ({ route, navigation }) => {
     navigation.goBack();
   };
 
+  const deleteExpenseHandler = () => {
+    dispatch(removeExpense({ id }));
+    cancelPressHandler();
+  };
+
   return (
     <View style={styles.rootContainer}>
       <View style={innerContainerStyle}>
@@ -31,7 +40,11 @@ const ManageExpensesScreen = ({ route, navigation }) => {
         <CustomButton style={styles.updateButton}
                       textStyle={styles.upgradeButtonText}>{isEditing ? 'Update' : 'Add'}</CustomButton>
       </View>
-      {isEditing && <Octicons name="trash" size={32} color={GlobalStyles.colors.error500} />}
+      {isEditing && (
+        <Pressable onPress={deleteExpenseHandler}>
+          <Octicons name="trash" size={32} color={GlobalStyles.colors.error500} />
+        </Pressable>
+      )}
     </View>
   );
 };

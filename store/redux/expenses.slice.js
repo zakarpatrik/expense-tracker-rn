@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 import { DUMMY_EXPENSES } from '../../data/dummy-data';
 
 const expensesSlice = createSlice({
@@ -24,10 +24,27 @@ const expensesSlice = createSlice({
       state.map(expense => expense.id === action.payload.id ? action.payload : expense);
     },
     removeExpense: (state, action) => {
-      state.splice(state.indexOf(action.payload), 1);
+      state.splice(state.findIndex((expense) => expense.id === action.payload.id), 1);
     },
   },
 });
+
+export const selectAllExpenses = (state) => state.expenses;
+export const selectAllExpensesSum = (state) => state.expenses.reduce((acc, current) => acc + current.amount, 0);
+
+export const selectRecentExpenses =
+  (state) => state.expenses.filter((expense) => {
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 7);
+
+    const expenseDate = new Date(expense.date);
+    return expenseDate >= sevenDaysAgo && expenseDate <= today;
+  });
+export const selectRecentExpensesSum = createSelector(
+  [selectRecentExpenses],
+  (recentExpenses) => recentExpenses.reduce((acc, current) => acc + current.amount, 0),
+);
 
 export const { addExpense, updateExpense, removeExpense } = expensesSlice.actions;
 
