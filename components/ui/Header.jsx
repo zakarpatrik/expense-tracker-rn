@@ -5,7 +5,7 @@ const Header = ({ title, amount }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.amount}>${amount}</Text>
+      <Text style={styles.amount}>${amount.toFixed(2)}</Text>
     </View>
   );
 };
