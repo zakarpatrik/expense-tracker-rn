@@ -1,9 +1,9 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { GlobalStyles } from '../../constants/styles';
 
-const CustomButton = ({ children, style, textStyle }) => {
+const CustomButton = ({ children, style, textStyle, onPress }) => {
   return (
-    <Pressable style={({ pressed }) => pressed ? styles.buttonPressed : null}>
+    <Pressable style={({ pressed }) => pressed ? styles.buttonPressed : null} onPress={onPress}>
       <View style={[styles.button, style]}>
         <Text style={[styles.buttonText, textStyle]}>{children}</Text>
       </View>

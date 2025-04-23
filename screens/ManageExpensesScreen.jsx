@@ -20,10 +20,14 @@ const ManageExpensesScreen = ({ route, navigation }) => {
     },
   ];
 
+  const cancelPressHandler = () => {
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.rootContainer}>
       <View style={innerContainerStyle}>
-        <CustomButton>Cancel</CustomButton>
+        <CustomButton onPress={cancelPressHandler}>Cancel</CustomButton>
         <CustomButton style={styles.updateButton}
                       textStyle={styles.upgradeButtonText}>{isEditing ? 'Update' : 'Add'}</CustomButton>
       </View>
