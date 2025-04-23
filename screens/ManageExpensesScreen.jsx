@@ -6,6 +6,7 @@ import CustomButton from '../components/ui/CustomButton';
 import { useDispatch } from 'react-redux';
 import { addExpense, removeExpense, updateExpense } from '../store/redux/expenses.slice';
 import { formatDate } from '../utils/format-date';
+import ManageExpenseForm from '../components/manage-expense/ManageExpenseForm';
 
 const ManageExpensesScreen = ({ route, navigation }) => {
   const { edit, id, title } = route.params;
@@ -45,6 +46,7 @@ const ManageExpensesScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.rootContainer}>
+      <ManageExpenseForm />
       <View style={innerContainerStyle}>
         <CustomButton onPress={cancelPressHandler}>Cancel</CustomButton>
         <CustomButton style={styles.updateButton}
