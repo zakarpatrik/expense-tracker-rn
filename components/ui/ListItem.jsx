@@ -40,8 +40,10 @@ const styles = StyleSheet.create({
   amountContainer: {
     backgroundColor: '#fff',
     borderRadius: 4,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
+    padding: 10,
+    width: '20%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   amountText: {
     fontSize: 12,
