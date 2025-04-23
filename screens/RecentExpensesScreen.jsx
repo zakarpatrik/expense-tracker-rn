@@ -11,7 +11,7 @@ const RecentExpensesScreen = () => {
   return (
     <View style={styles.rootContainer}>
       <Header title="Last 7 days" amount={recentExpenseSum} />
-      <ExpenseList data={recentExpenses} />
+      <ExpenseList data={recentExpenses} fallbackText="No recent expenses" />
     </View>
   );
 };

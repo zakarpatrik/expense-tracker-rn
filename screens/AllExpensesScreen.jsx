@@ -11,7 +11,7 @@ const AllExpensesScreen = () => {
   return (
     <View style={styles.rootContainer}>
       <Header title="Total" amount={expenseSum} />
-      <ExpenseList data={allExpenses} />
+      <ExpenseList data={allExpenses} fallbackText="No expenses found" />
     </View>
   );
 };
