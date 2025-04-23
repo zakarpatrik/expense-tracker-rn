@@ -2,10 +2,8 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useEffect } from 'react';
 import { Octicons } from '@expo/vector-icons';
 import { GlobalStyles } from '../constants/styles';
-import CustomButton from '../components/ui/CustomButton';
 import { useDispatch } from 'react-redux';
 import { addExpense, removeExpense, updateExpense } from '../store/redux/expenses.slice';
-import { formatDate } from '../utils/format-date';
 import ManageExpenseForm from '../components/manage-expense/ManageExpenseForm';
 
 const ManageExpensesScreen = ({ route, navigation }) => {
@@ -18,13 +16,6 @@ const ManageExpensesScreen = ({ route, navigation }) => {
     navigation.setOptions({ title });
   }, [navigation, title]);
 
-  const innerContainerStyle = [
-    styles.innerContainer,
-    isEditing && {
-      borderBottomWidth: 2,
-      borderBottomColor: GlobalStyles.colors.primary200,
-    },
-  ];
 
   const cancelPressHandler = () => {
     navigation.goBack();
@@ -35,27 +26,24 @@ const ManageExpensesScreen = ({ route, navigation }) => {
     cancelPressHandler();
   };
 
-  const confirmExpenseHandler = () => {
+  const confirmExpenseHandler = (expenseData) => {
     if (isEditing) {
-      dispatch(updateExpense({ id, description: 'New expense', amount: 19.98, date: formatDate(new Date()) }));
+      dispatch(updateExpense({
+        id,
+        ...expenseData,
+      }));
     } else {
-      dispatch(addExpense({ description: 'New expense', amount: 19.98, date: formatDate(new Date()) }));
+      dispatch(addExpense(expenseData));
     }
     cancelPressHandler();
   };
 
   return (
     <View style={styles.rootContainer}>
-      <ManageExpenseForm />
-      <View style={innerContainerStyle}>
-        <CustomButton onPress={cancelPressHandler}>Cancel</CustomButton>
-        <CustomButton style={styles.updateButton}
-                      textStyle={styles.upgradeButtonText}
-                      onPress={confirmExpenseHandler}
-        >{isEditing ? 'Update' : 'Add'}</CustomButton>
-      </View>
+      <ManageExpenseForm onCancel={cancelPressHandler} onSubmit={confirmExpenseHandler}
+                         submitLabel={isEditing ? 'Update' : 'Add'} id={id} />
       {isEditing && (
-        <Pressable onPress={deleteExpenseHandler}>
+        <Pressable style={styles.deleteContainer} onPress={deleteExpenseHandler}>
           <Octicons name="trash" size={32} color={GlobalStyles.colors.error500} />
         </Pressable>
       )}
@@ -71,17 +59,11 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
   },
-  innerContainer: {
+  deleteContainer: {
+    borderTopWidth: 2,
+    borderTopColor: GlobalStyles.colors.primary50,
     width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingBottom: 24,
-    marginBottom: 16,
-  },
-  updateButton: {
-    backgroundColor: GlobalStyles.colors.primary500,
-  },
-  upgradeButtonText: {
-    color: '#fff',
+    alignItems: 'center',
+    paddingTop: 20,
   },
 });
