@@ -1,12 +1,25 @@
 import { StyleSheet, View } from 'react-native';
 import Header from '../components/ui/Header';
 import ExpenseList from '../components/ui/ExpenseList';
-import { useSelector } from 'react-redux';
-import { selectRecentExpenses, selectRecentExpensesSum } from '../store/redux/expenses.slice';
+import { useEffect } from 'react';
+import { fetchExpenses } from '../utils/http';
+import { selectRecentExpenses, selectRecentExpensesSum, setExpenses } from '../store/redux/expenses.slice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const RecentExpensesScreen = () => {
+  const dispatch = useDispatch();
+
   const recentExpenses = useSelector(selectRecentExpenses);
   const recentExpenseSum = useSelector(selectRecentExpensesSum);
+
+  useEffect(() => {
+    const getExpenses = async () => {
+      const expenses = await fetchExpenses();
+      dispatch(setExpenses(expenses));
+    };
+
+    getExpenses();
+  }, []);
 
   return (
     <View style={styles.rootContainer}>

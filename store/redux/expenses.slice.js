@@ -13,6 +13,9 @@ const expensesSlice = createSlice({
         date: action.payload.date,
       });
     },
+    setExpenses: (state, action) => {
+      return action.payload;
+    },
     updateExpense: (state, action) => {
       return state.map(expense => expense.id === action.payload.id ? action.payload : expense);
     },
@@ -39,6 +42,6 @@ export const selectRecentExpensesSum = createSelector(
   (recentExpenses) => recentExpenses.reduce((acc, current) => acc + current.amount, 0),
 );
 
-export const { addExpense, updateExpense, removeExpense } = expensesSlice.actions;
+export const { addExpense, setExpenses, updateExpense, removeExpense } = expensesSlice.actions;
 
 export default expensesSlice.reducer;

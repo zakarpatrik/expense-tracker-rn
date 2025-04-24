@@ -5,6 +5,7 @@ import { GlobalStyles } from '../constants/styles';
 import { useDispatch } from 'react-redux';
 import { addExpense, removeExpense, updateExpense } from '../store/redux/expenses.slice';
 import ManageExpenseForm from '../components/manage-expense/ManageExpenseForm';
+import { storeExpense } from '../utils/http';
 
 const ManageExpensesScreen = ({ route, navigation }) => {
   const { edit, id, title } = route.params;
@@ -33,6 +34,7 @@ const ManageExpensesScreen = ({ route, navigation }) => {
         ...expenseData,
       }));
     } else {
+      storeExpense(expenseData);
       dispatch(addExpense(expenseData));
     }
     cancelPressHandler();
