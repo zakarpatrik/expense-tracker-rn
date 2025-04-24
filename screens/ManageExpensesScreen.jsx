@@ -5,7 +5,7 @@ import { GlobalStyles } from '../constants/styles';
 import { useDispatch } from 'react-redux';
 import { addExpense, removeExpense, updateExpense } from '../store/redux/expenses.slice';
 import ManageExpenseForm from '../components/manage-expense/ManageExpenseForm';
-import { storeExpense } from '../utils/http';
+import { deleteExpense, storeExpense, updateExpense as httpUpdateExpense } from '../utils/http';
 
 const ManageExpensesScreen = ({ route, navigation }) => {
   const { edit, id, title } = route.params;
@@ -22,20 +22,22 @@ const ManageExpensesScreen = ({ route, navigation }) => {
     navigation.goBack();
   };
 
-  const deleteExpenseHandler = () => {
+  const deleteExpenseHandler = async () => {
+    await deleteExpense(id);
     dispatch(removeExpense({ id }));
     cancelPressHandler();
   };
 
-  const confirmExpenseHandler = (expenseData) => {
+  const confirmExpenseHandler = async (expenseData) => {
     if (isEditing) {
       dispatch(updateExpense({
         id,
         ...expenseData,
       }));
+      await httpUpdateExpense(id, expenseData);
     } else {
-      storeExpense(expenseData);
-      dispatch(addExpense(expenseData));
+      const id = await storeExpense(expenseData);
+      dispatch(addExpense({ ...expenseData, id }));
     }
     cancelPressHandler();
   };

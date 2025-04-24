@@ -1,20 +1,19 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { DUMMY_EXPENSES } from '../../data/dummy-data';
 
 const expensesSlice = createSlice({
   name: 'expenses',
-  initialState: DUMMY_EXPENSES,
+  initialState: [],
   reducers: {
     addExpense: (state, action) => {
       state.push({
-        id: state[state.length - 1].id + 1,
+        id: action.payload.id,
         description: action.payload.description,
         amount: action.payload.amount,
         date: action.payload.date,
       });
     },
     setExpenses: (state, action) => {
-      return action.payload;
+      return action.payload.reverse();
     },
     updateExpense: (state, action) => {
       return state.map(expense => expense.id === action.payload.id ? action.payload : expense);

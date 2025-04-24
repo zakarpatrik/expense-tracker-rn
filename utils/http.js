@@ -2,17 +2,13 @@ import axios from 'axios';
 
 const BACKEND_URL = 'https://react-native-course-df624-default-rtdb.europe-west1.firebasedatabase.app';
 
-export const storeExpense = (expenseData) => {
-  axios.post(
-    BACKEND_URL + 'expenses.json',
-    expenseData,
-  );
+export const storeExpense = async (expenseData) => {
+  const res = await axios.post(BACKEND_URL + '/expenses.json', expenseData);
+  return res.data.name;
 };
 
 export const fetchExpenses = async () => {
   const res = await axios.get(BACKEND_URL + '/expenses.json');
-
-  console.log(res);
 
   const expenses = [];
 
@@ -27,4 +23,12 @@ export const fetchExpenses = async () => {
   }
 
   return expenses;
+};
+
+export const updateExpense = (id, expenseData) => {
+  return axios.put(BACKEND_URL + `/expenses/${id}.json`, expenseData);
+};
+
+export const deleteExpense = (id) => {
+  return axios.delete(BACKEND_URL + `/expenses/${id}.json`);
 };
