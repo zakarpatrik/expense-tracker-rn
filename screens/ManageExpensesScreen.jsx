@@ -7,9 +7,11 @@ import { addExpense, removeExpense, updateExpense } from '../store/redux/expense
 import ManageExpenseForm from '../components/manage-expense/ManageExpenseForm';
 import { deleteExpense, storeExpense, updateExpense as httpUpdateExpense } from '../utils/http';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
+import ErrorOverlay from '../components/ui/ErrorOverlay';
 
 const ManageExpensesScreen = ({ route, navigation }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState();
   const { edit, id, title } = route.params;
   const isEditing = Boolean(edit);
 
@@ -26,27 +28,44 @@ const ManageExpensesScreen = ({ route, navigation }) => {
 
   const deleteExpenseHandler = async () => {
     setIsSubmitting(true);
-    await deleteExpense(id);
-    setIsSubmitting(false);
-    dispatch(removeExpense({ id }));
-    cancelPressHandler();
+    try {
+      await deleteExpense(id);
+      dispatch(removeExpense({ id }));
+      cancelPressHandler();
+    } catch (e) {
+      setError('Could not delete expense!');
+      setIsSubmitting(false);
+    }
   };
 
   const confirmExpenseHandler = async (expenseData) => {
     setIsSubmitting(true);
-    if (isEditing) {
-      dispatch(updateExpense({
-        id,
-        ...expenseData,
-      }));
-      await httpUpdateExpense(id, expenseData);
-    } else {
-      const id = await storeExpense(expenseData);
-      dispatch(addExpense({ ...expenseData, id }));
+    try {
+      if (isEditing) {
+        dispatch(updateExpense({
+          id,
+          ...expenseData,
+        }));
+        await httpUpdateExpense(id, expenseData);
+      } else {
+        const id = await storeExpense(expenseData);
+        dispatch(addExpense({ ...expenseData, id }));
+      }
+      cancelPressHandler();
+    } catch (e) {
+      setError(`Could not ${isEditing ? 'update' : 'add'} expense`);
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
+  };
+
+  const errorHandler = () => {
+    setError(null);
     cancelPressHandler();
   };
+
+  if (!isSubmitting && error) {
+    return <ErrorOverlay message={error} onConfirm={errorHandler} />;
+  }
 
   if (isSubmitting) {
     return <LoadingOverlay />;

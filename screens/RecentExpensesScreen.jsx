@@ -6,9 +6,12 @@ import { fetchExpenses } from '../utils/http';
 import { selectRecentExpenses, selectRecentExpensesSum, setExpenses } from '../store/redux/expenses.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
+import ErrorOverlay from '../components/ui/ErrorOverlay';
 
 const RecentExpensesScreen = () => {
   const [isFetching, setIsFetching] = useState(true);
+  const [error, setError] = useState();
+
   const dispatch = useDispatch();
 
   const recentExpenses = useSelector(selectRecentExpenses);
@@ -16,13 +19,23 @@ const RecentExpensesScreen = () => {
 
   useEffect(() => {
     const getExpenses = async () => {
-      const expenses = await fetchExpenses();
+      try {
+        const expenses = await fetchExpenses();
+        dispatch(setExpenses(expenses));
+      } catch (e) {
+        setError('Could not fetch expenses!');
+      }
       setIsFetching(false);
-      dispatch(setExpenses(expenses));
     };
 
     getExpenses();
   }, []);
+
+  const errorHandler = () => setError(null);
+
+  if (error && !isFetching) {
+    return <ErrorOverlay message={error} onConfirm={errorHandler} />;
+  }
 
   if (isFetching) {
     return <LoadingOverlay />;
